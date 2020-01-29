@@ -19,7 +19,8 @@ export default class App extends Component{
     createNewItem(item){
        const newItem = {
             label:item, 
-            important: false, 
+            important: false,
+            done: false,  
             id:this.maxId++
         }
         return newItem;
@@ -48,16 +49,48 @@ export default class App extends Component{
             }
         });
     };
+    toggleProperty(arr,id,propName){
+        const idx = arr.findIndex((el)=>el.id===id);
+        const oldItem = arr[idx];
+        const newItem = {...oldItem,
+            [propName]:!oldItem[propName]};
+        return [
+            ...arr.slice(0,idx),
+            newItem,
+            ...arr.slice(idx+1)
+        ];
+    }
+
+    onTooggleImportant=(id)=> {
+        this.setState(({toDoData})=>{
+            return {
+                toDoData:this.toggleProperty(toDoData,id,'important')
+            }
+        });
+    };
+
+    onTooggleDone=(id)=> {
+        this.setState(({toDoData})=>{
+            return {
+                toDoData:this.toggleProperty(toDoData,id,'done')
+            }
+        });
+    };
 
     render(){
+       
+       const doneItems = this.state.toDoData.filter((el)=>el.done).length;
+       const toDoItems = this.state.toDoData.length-doneItems;
     return (
         <div className="todo-app ">
-            <AppHeader todo={1} done={2}/>
+            <AppHeader todo={toDoItems} done={doneItems}/>
             <SearchPanel />
             <ItemStatusFilter/>
             <ToDoList 
             todos = {this.state.toDoData} 
             onDeleted={this.deleteItem}
+            onTooggleImportant={this.onTooggleImportant}
+            onTooggleDone={this.onTooggleDone}
             />
             <ItemAddForm  addItem={this.addItem}/>
         </div>

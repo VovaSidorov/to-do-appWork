@@ -7,28 +7,9 @@ import { faExclamation } from '@fortawesome/free-solid-svg-icons'
 
 
 export default class ToDoListItem extends Component{
-    state={
-        done:false,
-        important:false
-    }
-    onLabelClick=()=>{
-        this.setState(({done})=>{
-            return {
-                done: !done
-            };
-        });
-     };
-     onMarkImportant=()=>{
-        this.setState(({important})=>{
-            return {
-                important: !important
-            };
-        });
-     };
 
     render() {
-        const {done,important}=this.state;
-        const {label,onDeleted}=this.props;
+        const {label,onDeleted, done, important, onTooggleImportant, onTooggleDone}=this.props;
 
         const style = {
             color: important ? 'tomato' : 'black',
@@ -49,12 +30,12 @@ export default class ToDoListItem extends Component{
             <span
                 className="todo-list-item-label"
                 style={style }
-                onClick={this.onLabelClick}
+                onClick={onTooggleDone}
             >
                 {label}
             </span>
            <button type="button"
-                   onClick={this.onMarkImportant}
+                   onClick={onTooggleImportant}
                    className="btn btn-outline-success btn-sm float-right">
                <FontAwesomeIcon icon={faExclamation}/>
       </button>
